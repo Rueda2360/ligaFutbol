@@ -66,6 +66,8 @@ class LigaEquipo(models.Model):
     goles_a_favor=fields.Integer()
     goles_en_contra=fields.Integer()
 
+    #Compruebo si la diferencia de goles es mayor a 4
+    
 
     #Constraints de SQL del modelo
     _sql_constraints = [

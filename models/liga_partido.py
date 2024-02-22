@@ -32,7 +32,26 @@ class LigaPartido(models.Model):
     )
     #Goles equipo de casa
     goles_fuera= fields.Integer()
+
+    #Calculamos la diferencia de goles
     
+    puntos_equipo_casa = fields.Integer(string='Puntos Equipo Casa', compute='_compute_puntos', store=True)
+    puntos_equipo_fuera = fields.Integer(string='Puntos Equipo Fuera', compute='_compute_puntos', store=True)
+
+    @api.depends('goles_casa', 'goles_fuera')
+    def _compute_puntos(self):
+        for record in self:
+            if record.goles_casa > record.goles_fuera + 3:
+                record.puntos_equipo_casa = 4
+                record.puntos_equipo_fuera = -1
+            elif record.goles_fuera > record.goles_casa + 3:
+                record.puntos_equipo_casa = -1
+                record.puntos_equipo_fuera = 4
+            else:
+                record.puntos_equipo_casa = 0
+                record.puntos_equipo_fuera = 0
+
+
     #Constraints de atributos
     @api.constrains('equipo_casa')
     def _check_mismo_equipo_casa(self):
@@ -68,6 +87,8 @@ class LigaPartido(models.Model):
             recordEquipo.derrotas=0
             recordEquipo.goles_a_favor=0
             recordEquipo.goles_en_contra=0
+            #Reseteo los puntos
+            recordEquipo.puntos=0
             
             for recordPartido in self.env['liga.partido'].search([]):  
         
@@ -98,8 +119,8 @@ class LigaPartido(models.Model):
                         recordEquipo.empates=recordEquipo.empates+1
                     
                     #Sumamos goles a favor y en contra
-                    recordEquipo.goles_a_favor=recordEquipo.goles_a_favor+recordPartido.goles_fuera
-                    recordEquipo.goles_en_contra=recordEquipo.goles_en_contra+recordPartido.goles_casa
+                    recordEquipo.puntos += recordPartido.puntos_equipo_casa
+                    recordEquipo.puntos += recordPartido.puntos_equipo_fuera
 
 
 
