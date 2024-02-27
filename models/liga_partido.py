@@ -99,6 +99,7 @@ class LigaPartido(models.Model):
                         #Si no, no le hago nada
                         recordEquipo.derrotas=recordEquipo.derrotas+1
                     else:
+                        recordEquipo.puntos+=1
                         recordEquipo.empates=recordEquipo.empates+1
                         
                     #Sumamos goles a favor y en contra
@@ -128,11 +129,27 @@ class LigaPartido(models.Model):
                         #Si no, no hago nada
                         recordEquipo.derrotas=recordEquipo.derrotas+1
                     else:
+                        recordEquipo.puntos+=1
                         recordEquipo.empates=recordEquipo.empates+1
                     
                     #Sumamos goles a favor y en contra
                     recordEquipo.goles_a_favor=recordEquipo.goles_a_favor+recordPartido.goles_fuera
                     recordEquipo.goles_en_contra=recordEquipo.goles_en_contra+recordPartido.goles_casa
+
+    #SumarGoles
+    def sumarGoles(self):
+        #Recorremos partidos y equipos
+        for recordEquipo in self.env['liga.equipo'].search([]):
+
+            
+            for recordPartido in self.env['liga.partido'].search([]):  
+        
+                #Si es el equipo de casa
+                if recordPartido.equipo_fuera.nombre==recordEquipo.nombre:   
+                    recordEquipo.goles+=2
+        # actualizoRegistrosEquipo después de actualizar los goles
+        self.actualizoRegistrosEquipo()
+
 
 
 

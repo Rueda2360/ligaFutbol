@@ -11,6 +11,7 @@
 
     <menuitem name="Gestión de liga" id="liga_base_menu" />
     <menuitem name="Equipos" id="liga_equipo_menu" parent="liga_base_menu" action="liga_equipo_action" />
+    <menuitem name="Suma2 a los visitantes" id="liga_partido_menu" parent="liga_base_menu" action="action_sumar_goles"/>
 
     <!-- Vista formulario -->
     <record id="liga_equipo_view_form" model="ir.ui.view">

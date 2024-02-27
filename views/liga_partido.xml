@@ -27,7 +27,9 @@
                         <field name="equipo_fuera" />
                         <field name="goles_fuera" />
                     </group>
-
+                    <footer>
+                        <button string="Sumar 2 goles a equipos visitantes" type="object" class="oe_highlight" name="sumarGoles"/>
+                    </footer>
                 </group>
             </form>
         </field>
