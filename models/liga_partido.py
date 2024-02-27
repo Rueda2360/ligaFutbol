@@ -81,12 +81,22 @@ class LigaPartido(models.Model):
                 if recordPartido.equipo_casa.nombre==recordEquipo.nombre:
                     
                     #Miramos si es victoria o derrota
-                    if recordPartido.goles_casa>recordPartido.goles_fuera and recordPartido.goles_casa -recordPartido.goles_fuera>=4:
-                        recordEquipo.puntos+=4
-                        #sumo puntos correspondientes
+                    if recordPartido.goles_casa>recordPartido.goles_fuera:
+                        #Si la diferencia de goles es de 4 o más
+                        if recordPartido.goles_casa -recordPartido.goles_fuera>=4:
+                            #sumo 4 puntos
+                            recordEquipo.puntos+=4
+                        #Si no
+                        else:
+                            #Sumo 3 puntos
+                            recordEquipo.puntos+=3;
                         recordEquipo.victorias=recordEquipo.victorias+1
-                    elif recordPartido.goles_casa<recordPartido.goles_fuera and recordPartido.goles_casa -recordPartido.goles_fuera<=4:
-                        recordEquipo.puntos-=1
+                    elif recordPartido.goles_casa<recordPartido.goles_fuera:
+                        #Si la diferencia de puntos es de 4 o más
+                        if recordPartido.goles_casa -recordPartido.goles_fuera<=4:
+                            #Le quito un punto
+                            recordEquipo.puntos-=1
+                        #Si no, no le hago nada
                         recordEquipo.derrotas=recordEquipo.derrotas+1
                     else:
                         recordEquipo.empates=recordEquipo.empates+1
@@ -99,13 +109,23 @@ class LigaPartido(models.Model):
                 if recordPartido.equipo_fuera.nombre==recordEquipo.nombre:
                     
                     #Miramos si es victoria o derrota
-                    if recordPartido.goles_casa<recordPartido.goles_fuera and recordPartido.goles_casa -recordPartido.goles_fuera<=4:
-
-                        recordEquipo.puntos+=4
+                    if recordPartido.goles_casa<recordPartido.goles_fuera:
+                        #Si la diferencia de puntos es de 4 o más
+                        if recordPartido.goles_casa -recordPartido.goles_fuera<=4:
+                            #Le sumo 4 puntos
+                            recordEquipo.puntos+=4
+                        #Si no
+                        else:
+                            #Le sumo 3 puntos
+                            recordEquipo.puntos+=3
                         recordEquipo.victorias=recordEquipo.victorias+1
                         
-                    elif recordPartido.goles_casa>recordPartido.goles_fuera and recordPartido.goles_casa -recordPartido.goles_fuera>=4:
-                        recordEquipo.puntos-=1
+                    elif recordPartido.goles_casa>recordPartido.goles_fuera:
+                        #Si la diferencia de puntos es de 4 o más
+                        if recordPartido.goles_casa -recordPartido.goles_fuera>=4:
+                            #Le resto un punto
+                            recordEquipo.puntos-=1
+                        #Si no, no hago nada
                         recordEquipo.derrotas=recordEquipo.derrotas+1
                     else:
                         recordEquipo.empates=recordEquipo.empates+1
