@@ -52,13 +52,17 @@ class LigaEquipo(models.Model):
         for record in self:
             record.jugados = record.victorias + record.empates + record.derrotas
 
+    #Le quito el _compute_puntos a puntos
+    puntos= fields.Integer(default=0, store=True)
     
-    puntos= fields.Integer( compute="_compute_puntos",default=0, store=True)
-    
+    '''
     @api.depends('victorias','empates')
     def _compute_puntos(self):
         for record in self:
             record.puntos = record.victorias * 3 + record.empates
+    
+    '''
+
 
     
     #Goles a favor y en contra

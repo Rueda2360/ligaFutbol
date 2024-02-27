@@ -35,23 +35,9 @@ class LigaPartido(models.Model):
 
     #Calculamos la diferencia de goles
     
-    puntos_equipo_casa = fields.Integer(string='Puntos Equipo Casa', compute='_compute_puntos', store=True)
-    puntos_equipo_fuera = fields.Integer(string='Puntos Equipo Fuera', compute='_compute_puntos', store=True)
-
-    @api.depends('goles_casa', 'goles_fuera')
-    def _compute_puntos(self):
-        for record in self:
-            if record.goles_casa > record.goles_fuera + 3:
-                record.puntos_equipo_casa = 4
-                record.puntos_equipo_fuera = -1
-            elif record.goles_fuera > record.goles_casa + 3:
-                record.puntos_equipo_casa = -1
-                record.puntos_equipo_fuera = 4
-            else:
-                record.puntos_equipo_casa = 0
-                record.puntos_equipo_fuera = 0
-
-
+    puntos_equipo_casa = fields.Integer(string='Puntos Equipo Local', compute='_compute_puntos', store=True)
+    puntos_equipo_fuera = fields.Integer(string='Puntos Equipo Visitante', compute='_compute_puntos', store=True)
+    
     #Constraints de atributos
     @api.constrains('equipo_casa')
     def _check_mismo_equipo_casa(self):
@@ -87,7 +73,6 @@ class LigaPartido(models.Model):
             recordEquipo.derrotas=0
             recordEquipo.goles_a_favor=0
             recordEquipo.goles_en_contra=0
-            #Reseteo los puntos
             recordEquipo.puntos=0
             
             for recordPartido in self.env['liga.partido'].search([]):  
@@ -96,9 +81,12 @@ class LigaPartido(models.Model):
                 if recordPartido.equipo_casa.nombre==recordEquipo.nombre:
                     
                     #Miramos si es victoria o derrota
-                    if recordPartido.goles_casa>recordPartido.goles_fuera:
+                    if recordPartido.goles_casa>recordPartido.goles_fuera and recordPartido.goles_casa -recordPartido.goles_fuera>=4:
+                        recordEquipo.puntos+=4
+                        #sumo puntos correspondientes
                         recordEquipo.victorias=recordEquipo.victorias+1
-                    elif recordPartido.goles_casa<recordPartido.goles_fuera:
+                    elif recordPartido.goles_casa<recordPartido.goles_fuera and recordPartido.goles_casa -recordPartido.goles_fuera<=4:
+                        recordEquipo.puntos-=1
                         recordEquipo.derrotas=recordEquipo.derrotas+1
                     else:
                         recordEquipo.empates=recordEquipo.empates+1
@@ -111,16 +99,20 @@ class LigaPartido(models.Model):
                 if recordPartido.equipo_fuera.nombre==recordEquipo.nombre:
                     
                     #Miramos si es victoria o derrota
-                    if recordPartido.goles_casa<recordPartido.goles_fuera:
+                    if recordPartido.goles_casa<recordPartido.goles_fuera and recordPartido.goles_casa -recordPartido.goles_fuera<=4:
+
+                        recordEquipo.puntos+=4
                         recordEquipo.victorias=recordEquipo.victorias+1
-                    elif recordPartido.goles_casa>recordPartido.goles_fuera:
+                        
+                    elif recordPartido.goles_casa>recordPartido.goles_fuera and recordPartido.goles_casa -recordPartido.goles_fuera>=4:
+                        recordEquipo.puntos-=1
                         recordEquipo.derrotas=recordEquipo.derrotas+1
                     else:
                         recordEquipo.empates=recordEquipo.empates+1
                     
                     #Sumamos goles a favor y en contra
-                    recordEquipo.puntos += recordPartido.puntos_equipo_casa
-                    recordEquipo.puntos += recordPartido.puntos_equipo_fuera
+                    recordEquipo.goles_a_favor=recordEquipo.goles_a_favor+recordPartido.goles_fuera
+                    recordEquipo.goles_en_contra=recordEquipo.goles_en_contra+recordPartido.goles_casa
 
 
 
