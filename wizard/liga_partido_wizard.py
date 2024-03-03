@@ -1,10 +1,8 @@
 # -*- coding: utf-8 -*-
 from odoo import models, fields
 
-#Esta clase observamos que hereda de "models.TransientModel" una clase especial
-#que crea un modelo, pero es temporal y no hacer permanente sus datos en la base de datos.
-#Se utiliza para "mientras dura el Wizard"
-class LigaEquipoWizard(models.TransientModel):
+
+class LigaPartidoWizard(models.TransientModel):
     _name = 'liga.partido.wizard'
 
     equipo_casa = fields.Many2one('liga.equipo', string='Equipo local', required=True)
