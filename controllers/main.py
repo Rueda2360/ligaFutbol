@@ -24,25 +24,26 @@ class Main(http.Controller):
     
 
     @http.route('/eliminarempates', type='http', auth='none')
-    def eliminarEmpates(self, **kwargs):
+    def eliminarEmpates(self):
 
         #Recibimos los partidos y los equipos
         equipos = request.env['liga.equipo'].sudo().search([])
-        partidos = request.env['liga.partido'].sudo().search([])
+
         nEmpates=0
         #Los recorremos
         for recordEquipo in equipos:
-            for recordPartido in partidos:
+            for recordPartido in request.env['liga.partido'].sudo().search([]):
                 #Si el partido es empate, lo borramos
                 if recordPartido.goles_casa==recordPartido.goles_fuera:
                     nEmpates+=1
                     #unlink():Borra de la base de datos un registro.
                     recordPartido.unlink()
 
+        partidos = request.env['liga.partido'].sudo().search([])
         #Ya están los datos borrados, pero debemos actualizar los puntos de los partidos
 
-        for equipo in equipos:
-            equipo.actualizoRegistrosEquipo()
+        for partido in partidos:
+            partido.actualizoRegistrosEquipo()
 
         #Devolvemos la cantidad de partidos eliminados
         return "Empates eliminados " + str(nEmpates)
