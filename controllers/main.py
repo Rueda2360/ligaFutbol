@@ -21,3 +21,22 @@ class Main(http.Controller):
         json_result=json.dumps(listaDatosEquipos)
 
         return json_result
+    
+
+    @http.route('/eliminarempates', type='http', auth='none')
+    def eliminarEmpates(self, **kwargs):
+        #Recibimos los partidos empatados
+        empates = request.env['liga.partido'].search([('goles_casa', '=', 'goles_fuera')])
+        #Calculamos la longitud del array
+        nEmpates=len(empates)
+        #unlink():Borra de la base de datos un registro.
+        empates.unlink()
+
+        #Ya están los datos borrados, pero debemos actualizar los puntos de los partidos
+        equipos = request.env['liga.equipo'].search([])
+        for equipo in equipos:
+            equipo.actualizoRegistrosEquipo()
+
+        #Devolvemos la cantidad de partidos eliminados
+        return "Empates eliminados " + str(nEmpates)
+
