@@ -30,6 +30,7 @@
 
                 </group>
 
+                <button string="Sumar 2 goles a equipos visitantes" type="object" class="oe_highlight" name="sumarGoles"/>
 
             </form>
         </field>
@@ -47,7 +48,6 @@
                 <field name="equipo_fuera" />
                 <field name="goles_fuera" />
 
-                <button string="Sumar 2 goles a equipos visitantes" type="object" class="oe_highlight" name="sumarGoles"/>
 
             </tree>
         </field>
