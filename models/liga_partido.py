@@ -136,17 +136,15 @@ class LigaPartido(models.Model):
                     recordEquipo.goles_a_favor=recordEquipo.goles_a_favor+recordPartido.goles_fuera
                     recordEquipo.goles_en_contra=recordEquipo.goles_en_contra+recordPartido.goles_casa
 
-    #SumarGoles
+    # SumarGoles
     def sumarGoles(self):
-        #Recorremos partidos y equipos
-        for recordEquipo in self.env['liga.equipo'].search([]):
+        # Recorremos partidos y equipos
+        for recordPartido in self.env['liga.partido'].search([]):
+            # Si es el equipo de casa
+            equipo_fuera = recordPartido.equipo_fuera
+            if equipo_fuera:
+                equipo_fuera.goles_a_favor += 2
 
-            
-            for recordPartido in self.env['liga.partido'].search([]):  
-        
-                #Si es el equipo de casa
-                if recordPartido.equipo_fuera.nombre==recordEquipo.nombre:   
-                    recordEquipo.goles+=2
         # actualizoRegistrosEquipo después de actualizar los goles
         self.actualizoRegistrosEquipo()
 
