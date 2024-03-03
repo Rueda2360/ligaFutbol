@@ -93,7 +93,7 @@ class LigaPartido(models.Model):
                         recordEquipo.victorias=recordEquipo.victorias+1
                     elif recordPartido.goles_casa<recordPartido.goles_fuera:
                         #Si la diferencia de puntos es de 4 o más
-                        if recordPartido.goles_casa -recordPartido.goles_fuera<=4:
+                        if recordPartido.goles_fuera -recordPartido.goles_casa>=4:
                             #Le quito un punto
                             recordEquipo.puntos-=1
                         #Si no, no le hago nada
@@ -106,7 +106,36 @@ class LigaPartido(models.Model):
                     recordEquipo.goles_a_favor=recordEquipo.goles_a_favor+recordPartido.goles_casa
                     recordEquipo.goles_en_contra=recordEquipo.goles_en_contra+recordPartido.goles_fuera
 
-                
+                #Si es el equipo de fuera
+                elif recordPartido.equipo_fuera.nombre==recordEquipo.nombre:
+                    
+                    #Miramos si es victoria del visitante
+                    if recordPartido.goles_fuera>recordPartido.goles_casa:
+                        #Si la diferencia de puntos es de 4 o más
+                        if recordPartido.goles_fuera -recordPartido.goles_casa>=4:
+                            #Le sumo 4 puntos
+                            recordEquipo.puntos+=4
+                        #Si no
+                        else:
+                            #Le sumo 3 puntos
+                            recordEquipo.puntos+=3
+                        recordEquipo.victorias=recordEquipo.victorias+1
+                        
+                    elif recordPartido.goles_fuera<recordPartido.goles_casa:
+                        #Si la diferencia de puntos es de 4 o más
+                        if recordPartido.goles_casa -recordPartido.goles_fuera>=4:
+                            #Le resto un punto
+                            recordEquipo.puntos-=1
+                        #Si no, no hago nada
+                        recordEquipo.derrotas=recordEquipo.derrotas+1
+                    else:
+                        recordEquipo.puntos+=1
+                        recordEquipo.empates=recordEquipo.empates+1
+                    
+                    #Sumamos goles a favor y en contra
+                    recordEquipo.goles_a_favor=recordEquipo.goles_a_favor+recordPartido.goles_fuera
+                    recordEquipo.goles_en_contra=recordEquipo.goles_en_contra+recordPartido.goles_casa
+    
     #SumarGoles
     def sumarGoles(self):
         #Recorremos partidos y equipos
