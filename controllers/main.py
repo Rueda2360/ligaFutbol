@@ -39,6 +39,7 @@ class Main(http.Controller):
                     #unlink():Borra de la base de datos un registro.
                     recordPartido.unlink()
 
+        #Vuelvo a pedirlo por si acaso. No sé si es obligatorio pero por si da errores de registro al haber estado eliminando la base de datos prefiero no arriesgarme
         partidos = request.env['liga.partido'].sudo().search([])
         #Ya están los datos borrados, pero debemos actualizar los puntos de los partidos
 
