@@ -6,14 +6,16 @@
         <field name='model'>liga.partido.wizard</field>
         <field name='arch' type='xml'>
             <form string="Introducir datos de un partido">
-                <group>
-                    <field name="equipo_casa"/>
-                    <field name="goles_casa"/>
-                </group>
-                <group>
-                    <field name="equipo_fuera"/>
-                    <field name="goles_fuera"/>
-                </group>
+                <sheet>
+                    <group>
+                        <field name="equipo_casa"/>
+                        <field name="goles_casa"/>
+                    </group>
+                    <group>
+                        <field name="equipo_fuera"/>
+                        <field name="goles_fuera"/>
+                    </group>
+                </sheet>
                 <footer>
                     <button string='Añadir' name='add_liga_partido' class='btn-primary' type='object'/>
                     <button string='Cancel' class='btn-default' special='cancel'/>
