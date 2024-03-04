@@ -89,7 +89,7 @@ class LigaPartido(models.Model):
                         #Si no
                         else:
                             #Sumo 3 puntos
-                            recordEquipo.puntos+=3;
+                            recordEquipo.puntos+=3
                         recordEquipo.victorias=recordEquipo.victorias+1
                     elif recordPartido.goles_casa<recordPartido.goles_fuera:
                         #Si la diferencia de puntos es de 4 o más
